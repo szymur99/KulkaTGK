@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: c074f81d5d3b9504f9dca8b14de01ee1
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 283698
+  packageName: Simple Rule Tiles
+  packageVersion: 1.1
+  assetPath: Assets/SimpleRuleTiles/DemoScene/DemoScene.unity
+  uploadId: 666033
