@@ -11,29 +11,45 @@ public class DamageBlock : MonoBehaviour
 
     private PlayerHealth touching;
 
-    void OnCollisionEnter2D(Collision2D collision)
+void OnCollisionEnter2D(Collision2D collision)
     {
         PlayerHealth health = collision.collider.GetComponentInParent<PlayerHealth>();
-        if (health == null) return;
+        if (health == null || health.IsDead) return;
 
-        touching = health;
+        SetTouching(health);
         touching.TakeDamage(damage);
     }
 
-    void OnCollisionExit2D(Collision2D collision)
+void OnCollisionExit2D(Collision2D collision)
     {
         if (touching == null) return;
-        if (collision.collider.GetComponentInParent<PlayerHealth>() == touching) touching = null;
+        if (collision.collider.GetComponentInParent<PlayerHealth>() == touching) SetTouching(null);
     }
 
     // Update zamiast OnCollisionStay2D: uśpione Rigidbody2D (kulka leżąca na bloku) nie wysyła zdarzeń Stay.
-    void Update()
+void Update()
     {
-        if (touching != null) touching.TakeDamage(damage);
+        if (touching == null) return;
+        if (touching.IsDead) { SetTouching(null); return; }
+        touching.TakeDamage(damage);
     }
 
-    void OnDisable()
+void OnDisable()
     {
-        touching = null;
+        SetTouching(null);
     }
+
+// Po śmierci gracza zapominamy o nim, żeby po respawnie nie dostał obrażeń od starego kontaktu.
+    private void SetTouching(PlayerHealth health)
+    {
+        if (touching != null) touching.OnDied -= ClearTouching;
+        touching = health;
+        if (touching != null) touching.OnDied += ClearTouching;
+    }
+
+    private void ClearTouching()
+    {
+        SetTouching(null);
+    }
+
 }

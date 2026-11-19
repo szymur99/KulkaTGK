@@ -46,6 +46,17 @@ public class PlayerHealth : MonoBehaviour
         return true;
     }
 
+/// <summary>Natychmiast zabija gracza (np. wypadnięcie poza mapę), z pominięciem cooldownu obrażeń.</summary>
+    public void Kill()
+    {
+        if (IsDead) return;
+
+        CurrentHealth = 0;
+        OnHealthChanged?.Invoke(CurrentHealth, maxHealth);
+        Die();
+    }
+
+
     private void Die()
     {
         IsDead = true;
